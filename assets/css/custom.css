@@ -216,6 +216,13 @@ a:hover { color: var(--cx-accent-muted); }
   display: none !important;
 }
 
+/* ── ⭐ 侧边栏隐藏「标签」入口（2026-11-14，CI html-proofer 修复）──
+   页面本身保留：标签归档页的面包屑「标签」链接指向 /tags/ 索引，
+   删页面会导致 124 处死链；只藏导航项，索引页仍可经面包屑访问 */
+#sidebar a[href='/tags/'] {
+  display: none !important;
+}
+
 /* ── ⭐ 站点名与头像水平同心对齐（2026-11-14）──
    主题 profile-wrapper 左右内边距不对称（左 2.5rem / 右 1.25rem），
    头像圆心与站点名圆心实测偏差 25px；改为对称内边距 + flex 统一居中轴 */
