@@ -1,5 +1,7 @@
 ---
 layout: default
+# ⭐ 右侧面板挂载全站文章目录（与文章页 TOC 同机制，走 default 布局的 panel_includes）
+panel_includes: [home-post-list]
 ---
 
 <!-- ============================================================
@@ -20,17 +22,24 @@ layout: default
   <!-- ⭐ 装饰性标签排已于 2026-07-31 删除（纯花瓶，不可点击） -->
 </section>
 
-<!-- ⭐ 分隔线 -->
-<div class="cx-divider"><hr></div>
+<!-- ⭐ 分隔线已于 2026-11-14 删除（视觉降噪） -->
 
-<!-- ⭐ 文章列表区（B1: Liquid 循环 site.posts + B1a: post.excerpt 自动摘要） -->
+<!-- ⭐ 文章列表区（B1: Liquid 循环 site.posts + B1a: post.excerpt 自动摘要）
+     ⭐ 2026-11-14 改为全量渲染：首页直接下滑浏览全部文章，不再跳转归档
+     ⭐ 2026-11-14 恢复主题原生置顶能力：pin: true 的文章排在最前并带图钉徽标 -->
+{% assign cx_pinned = site.posts | where: 'pin', 'true' %}
+{% assign cx_normal = site.posts | where_exp: 'item', 'item.pin != true and item.hidden != true' %}
+{% assign cx_feed = cx_pinned | concat: cx_normal %}
 <section class="cx-posts">
-  <h2 class="cx-section-label">最新文章</h2>
+  <h2 class="cx-section-label">全部文章</h2>
 
   <ul class="cx-post-list">
-    {% for post in paginator.posts limit: 5 %}
-      <li class="cx-post-item">
+    {% for post in cx_feed %}
+      <li class="cx-post-item" id="feed-{{ post.slug }}">
         <div class="cx-post-meta">
+          {% if post.pin %}
+          <span class="cx-pin-badge"><i class="fas fa-thumbtack fa-fw"></i>置顶</span>
+          {% endif %}
           <time class="cx-post-date" datetime="{{ post.date | date_to_xmlschema }}">
             {{ post.date | date: '%Y-%m-%d' }}
           </time>
@@ -65,8 +74,4 @@ layout: default
       </li>
     {% endfor %}
   </ul>
-
-  <div class="cx-view-all">
-    <a href="{{ '/archives/' | relative_url }}">浏览全部文章</a>
-  </div>
 </section>

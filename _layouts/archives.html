@@ -1,0 +1,67 @@
+---
+layout: page
+# The Archives of posts.
+# ⭐ 2026-11-14 项目级覆盖主题布局：时间线上方插入「CVE/CNVD 复现速查」折叠面板
+#    主题原布局不渲染页面正文，故只能走布局覆盖（主题原版 Liquid 原样保留在下方）
+---
+
+{% include lang.html %}
+
+{% assign df_strftime_m = site.data.locales[lang].df.archives.strftime | default: '/ %m' %}
+{% assign df_dayjs_m = site.data.locales[lang].df.archives.dayjs | default: '/ MM' %}
+
+{% comment %}
+  ⭐ CVE/CNVD 速查数据：标题含 CVE- / CNVD- / CNNVD- 的文章
+  （CNNVD- 不含 CNVD- 子串，三个条件缺一不可）
+  编号从标题全角冒号后段提取，如「Apache Log4j2 RCE 复现：CVE-2021-44228（Log4Shell）」→ CVE-2021-44228
+{% endcomment %}
+{% assign cx_cve_posts = site.posts | where_exp: 'item',
+  "item.title contains 'CVE-' or item.title contains 'CNVD-' or item.title contains 'CNNVD-'" %}
+
+<div class="cx-cve-panel">
+  <details open>
+    <summary class="cx-cve-summary">
+      <i class="fas fa-crosshairs fa-fw"></i>
+      CVE / CNVD 复现速查
+      <span class="cx-cve-count">{{ cx_cve_posts | size }} 篇</span>
+    </summary>
+    <ul class="cx-cve-list">
+      {% for post in cx_cve_posts %}
+      <li>
+        <span class="cx-cve-id">{{ post.title | split: '：' | last | split: '（' | first }}</span>
+        <a class="cx-cve-title" href="{{ post.url | relative_url }}">{{ post.title }}</a>
+        {% if post.categories.size > 0 %}
+        <span class="cx-cve-grade">{{ post.categories | last }}</span>
+        {% endif %}
+        <span class="cx-cve-date">{{ post.date | date: '%Y-%m-%d' }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+  </details>
+</div>
+
+<div id="archives" class="pl-xl-3">
+  {% for post in site.posts %}
+    {% assign cur_year = post.date | date: '%Y' %}
+
+    {% if cur_year != last_year %}
+      {% unless forloop.first %}</ul>{% endunless %}
+
+      <time class="year lead d-block">{{ cur_year }}</time>
+      {{ '<ul class="list-unstyled">' }}
+
+      {% assign last_year = cur_year %}
+    {% endif %}
+
+    <li>
+      {% assign ts = post.date | date: '%s' %}
+      <span class="date day" data-ts="{{ ts }}" data-df="DD">{{ post.date | date: '%d' }}</span>
+      <span class="date month small text-muted ms-1" data-ts="{{ ts }}" data-df="{{ df_dayjs_m }}">
+        {{ post.date | date: df_strftime_m }}
+      </span>
+      <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+    </li>
+
+    {% if forloop.last %}</ul>{% endif %}
+  {% endfor %}
+</div>

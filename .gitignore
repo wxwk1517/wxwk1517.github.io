@@ -33,3 +33,6 @@ nul
 # WorkBuddy
 .codebuddy/
 .workbuddy/
+
+# ZCode 工作目录
+.zcode/

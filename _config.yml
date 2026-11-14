@@ -17,7 +17,7 @@ future: true
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
 
-title: bluek # the main title
+title: wxwk2206 # the main title
 
 tagline: 安全研究 & 技术分享 # it will display as the subtitle
 
@@ -147,8 +147,8 @@ pwa:
     deny_paths:
       # - "/example"  # URLs match `<SITE_URL>/example/*` will not be cached by the PWA
 
-# ⭐ 与首页布局 limit:5 对齐（原为 10，导致第 6~10 篇在分页链中丢失）
-paginate: 5
+# ⭐ 2026-11-14 移除分页：首页布局已改为全量渲染文章（下滑浏览全部），无需 paginate
+# paginate: 5
 
 # The base URL of your site
 baseurl: ""

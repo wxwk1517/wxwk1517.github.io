@@ -1,0 +1,78 @@
+<!-- ⭐ 首页右侧「文章目录」面板（2026-11-14）
+     仿文章页 TOC 面板形态：吸顶 + 内部滚动 + 滚动高亮当前文章
+     点击标题平滑滚动到首页信息流中对应文章（#feed-<slug>） -->
+<section id="cx-post-nav" class="position-sticky ps-0 pb-4">
+  <h2 class="panel-heading ps-3 pb-2 mb-0">文章目录</h2>
+
+  <nav class="cx-post-nav">
+    <ul>
+      {% for post in site.posts %}
+      <li>
+        <a href="#feed-{{ post.slug }}" data-target="feed-{{ post.slug }}" class="cx-post-nav-link" title="{{ post.title }}">
+          {{ post.title }}
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </nav>
+</section>
+
+<script>
+  (function () {
+    function init() {
+      var links = document.querySelectorAll('.cx-post-nav-link');
+      if (!links.length) return;
+
+      // ⭐ 真正可滚动的容器是外层 #cx-post-nav（overflow-y: auto），不是内层 nav
+      var box = document.getElementById('cx-post-nav');
+      var items = [];
+      links.forEach(function (a) {
+        var el = document.getElementById(a.getAttribute('data-target'));
+        if (el) items.push({ link: a, el: el });
+      });
+      if (!items.length || !box) return;
+
+      var current = -1;
+
+      function setActive(idx) {
+        if (idx === current) return;
+        if (current >= 0) items[current].link.classList.remove('active');
+        if (idx >= 0) {
+          items[idx].link.classList.add('active');
+          // 面板内部滚动跟随：让当前项保持在可视范围中部
+          var boxRect = box.getBoundingClientRect();
+          var laRect = items[idx].link.getBoundingClientRect();
+          var lt = laRect.top - boxRect.top + box.scrollTop;
+          if (lt < box.scrollTop + 8 || lt > box.scrollTop + box.clientHeight - laRect.height - 8) {
+            box.scrollTop = Math.max(0, lt - box.clientHeight / 2);
+          }
+        } else if (box.scrollTop > 0) {
+          // ⭐ 回到页面顶部（Hero 区）：目录面板滚回首屏，露出「文章目录」标题
+          box.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        current = idx;
+      }
+
+      function onScroll() {
+        // 直接执行（不依赖 requestAnimationFrame：后台/遮挡标签页会暂停 rAF 导致监听失效）
+        var probe = 140;
+        var idx = -1;
+        for (var i = 0; i < items.length; i++) {
+          if (items[i].el.getBoundingClientRect().top <= probe) idx = i;
+          else break;
+        }
+        setActive(idx);
+      }
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    }
+
+    // DOMContentLoaded 后初始化，确保所有锚点元素已解析
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  })();
+</script>
