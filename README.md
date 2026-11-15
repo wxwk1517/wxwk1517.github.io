@@ -1,4 +1,4 @@
-# wxwk2206 的安全研究笔记
+# wxwk1517 的安全研究笔记
 
 > 个人技术博客，专注 **Web 安全 / 代码审计**，基于 [Chirpy](https://github.com/cotes2020/jekyll-theme-chirpy) 主题构建，托管于 GitHub Pages。
 >

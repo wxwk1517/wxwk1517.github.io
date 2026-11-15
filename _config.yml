@@ -17,7 +17,7 @@ future: true
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
 
-title: wxwk2206 # the main title
+title: wxwk1517 # the main title
 
 tagline: 安全研究 & 技术分享 # it will display as the subtitle
 
@@ -29,7 +29,7 @@ description: >- # used by seo meta and the atom feed
 url: "https://wxwk1517.github.io"
 
 github:
-  username: wxwk2206 # change to your GitHub username
+  username: wxwk1517 # change to your GitHub username
 
 twitter:
   username: # change to your Twitter username
@@ -37,12 +37,12 @@ twitter:
 social:
   # Change to your full name.
   # It will be displayed as the default author of the posts and the copyright owner in the Footer
-  name: wxwk2206
+  name: wxwk1517
   email: # change to your email address
   fediverse_handle: # fill in your fediverse handle. E.g. "@username@domain.com"
   links:
     # The first element serves as the copyright owner's link
-    - https://github.com/wxwk2206 # change to your GitHub homepage
+    - https://github.com/wxwk1517 # change to your GitHub homepage
 
 # Site Verification Settings
 webmaster_verifications:
